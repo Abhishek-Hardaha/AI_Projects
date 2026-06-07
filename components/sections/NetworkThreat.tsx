@@ -1,174 +1,298 @@
 "use client";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { ShieldCheck, Activity, Terminal } from "lucide-react";
-
-const DUMMY_LOGS = [
-  "Initializing PCA dimensionality reduction...",
-  "Baseline established: K-Means clustering active.",
-  "Monitoring inbound traffic on port 443...",
-  "Normal traffic vector: [0.04, 0.92, 0.01]",
-  "Normal traffic vector: [0.03, 0.95, 0.02]",
-  "WARNING: Statistical deviation detected in node 0x7F.",
-  "DPI Engine: Evaluating IP headers for signature match...",
-  "CRITICAL: DDoS anomaly signature identified.",
-  "Isolating node 0x7F...",
-  "Updating access control lists...",
-  "Threat Neutralized. Restoring normal traffic routing.",
-];
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { Terminal as TermIcon, ShieldCheck, Cpu, Network, Target, Lock, Server, MoveDown } from "lucide-react";
+import TubesBackground from "@/components/ui/TubesBackground";
 
 export default function NetworkThreat() {
   const [logs, setLogs] = useState<string[]>([]);
+  const [clusterPoints, setClusterPoints] = useState<{dx: number, dy: number}[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [30, -30]);
   
   useEffect(() => {
-    let currentIndex = 0;
+    // Generate cluster points for PCA diagram (client-side only to prevent hydration mismatch)
+    const pts = Array.from({ length: 45 }).map(() => {
+      const u = 1 - Math.random();
+      const v = Math.random();
+      const r = Math.sqrt(-2.0 * Math.log(u)) * 10;
+      const theta = 2.0 * Math.PI * v;
+      return { dx: r * Math.cos(theta), dy: r * Math.sin(theta) };
+    });
+    setClusterPoints(pts);
+
+    const initialLogs = [
+      "Initializing ML Threat Engine v2.4...",
+      "Loading ONNX models to Edge Node (NPU)...",
+      "Establishing PCAP capture stream (eth0)..."
+    ];
+    
+    setLogs(initialLogs);
+
+    const trafficTypes = [
+      "[OK] TCP 192.168.1.45:443 -> 10.0.0.5:80 (Baseline: 0.98)",
+      "[OK] UDP 192.168.1.12:53 -> 8.8.8.8:53 (Baseline: 0.99)",
+      "[WARN] High latency connection detected: 192.168.1.100",
+      "[OK] TCP 10.0.0.5:8080 -> 10.0.0.2:443 (Baseline: 0.95)",
+    ];
+
+    const threatTypes = [
+      "[CRITICAL] ANOMALY DETECTED: DDoS Signature Match. Score: 0.02",
+      "[BLOCK] Isolating MAC 00:1B:44:11:3A:B7",
+      "[ALERT] Lateral Movement Attempt blocked on port 445"
+    ];
+
+    let counter = 0;
     const interval = setInterval(() => {
-      setLogs((prev) => {
-        const newLogs = [...prev, DUMMY_LOGS[currentIndex]];
-        if (newLogs.length > 8) newLogs.shift();
-        return newLogs;
-      });
-      currentIndex = (currentIndex + 1) % DUMMY_LOGS.length;
+      counter++;
+      const isThreat = counter % 7 === 0;
+      const newLog = isThreat 
+        ? threatTypes[Math.floor(Math.random() * threatTypes.length)]
+        : trafficTypes[Math.floor(Math.random() * trafficTypes.length)];
+      
+      setLogs(prev => [...prev.slice(-8), newLog]);
     }, 1200);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 md:p-12 overflow-hidden snap-start shrink-0 bg-[#020202]">
-      {/* Dynamic Background Network Mock */}
-      <div className="absolute inset-0 z-0 opacity-40">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          
-          {/* Animated SVG Nodes & Links */}
-          <g transform="translate(50%, 50%)">
-            {/* Normal links */}
-            <motion.line x1="-300" y1="-100" x2="-100" y2="50" stroke="#00f0ff" strokeWidth="2" strokeOpacity="0.3" />
-            <motion.line x1="-100" y1="50" x2="150" y2="-50" stroke="#00f0ff" strokeWidth="2" strokeOpacity="0.3" />
-            <motion.line x1="150" y1="-50" x2="300" y2="150" stroke="#00f0ff" strokeWidth="2" strokeOpacity="0.3" />
-            
-            {/* Threat link */}
-            <motion.line 
-              x1="-100" y1="50" x2="0" y2="200" 
-              stroke="#ff2a2a" strokeWidth="3" 
-              initial={{ strokeOpacity: 0.2 }}
-              animate={{ strokeOpacity: [0.2, 1, 0.2] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            
-            {/* Nodes */}
-            <circle cx="-300" cy="-100" r="6" fill="#00f0ff" />
-            <circle cx="-100" cy="50" r="8" fill="#00f0ff" />
-            <circle cx="150" cy="-50" r="6" fill="#00f0ff" />
-            <circle cx="300" cy="150" r="6" fill="#00f0ff" />
-            
-            {/* Threat Node */}
-            <motion.circle 
-              cx="0" cy="200" r="12" fill="#ff2a2a" 
-              initial={{ scale: 1, opacity: 0.8 }}
-              animate={{ scale: [1, 1.5, 1], opacity: [0.8, 1, 0.8] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              style={{ filter: "drop-shadow(0 0 10px #ff2a2a)" }}
-            />
-          </g>
-        </svg>
+    <section ref={containerRef} className="relative min-h-screen md:h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+      {/* Interactive Tubes Background */}
+      <div className="absolute inset-0 w-full h-full opacity-30 mix-blend-screen pointer-events-auto">
+        <TubesBackground />
       </div>
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-neon-red/10 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-7xl flex flex-col items-center text-center space-y-12">
+      <div className="relative z-10 max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 lg:gap-16 items-center">
         
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="space-y-4 max-w-3xl"
-        >
-          <div className="inline-block px-4 py-1.5 rounded-full border border-neon-red/30 bg-neon-red/10 text-neon-red text-sm font-mono">
-            Project 04
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Network <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-orange-400">Threat</span> & Anomaly Detection
-          </h2>
-          <p className="text-lg text-white/70">
-            Real-Time Traffic Analysis & Intrusion Prevention utilizing unsupervised machine learning.
-          </p>
-        </motion.div>
-
-        {/* Command Center Layout */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* Metrics Panel */}
+        {/* Left Column: Meaningful Text Content */}
+        <div className="flex flex-col gap-4 md:gap-8">
+          {/* Header */}
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="glass-panel p-6 flex flex-col gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="space-y-3"
           >
-            <div className="flex items-center gap-3 text-neon-blue font-mono font-bold">
-              <Activity className="w-5 h-5" /> Live Metrics
+            <div className="inline-block px-3 py-1 rounded-full border border-neon-red/30 bg-neon-red/10 text-neon-red text-xs font-mono mb-1">
+              Project 04 // Anomaly Detection
             </div>
-            
-            <div className="space-y-4">
-              <div>
-                <div className="text-xs text-white/50 mb-1 font-mono uppercase">Inbound Traffic</div>
-                <div className="text-2xl font-bold">42.8 Gbps</div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+              Network <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-orange-400">Threat</span> AI
+            </h2>
+            <p className="text-sm md:text-lg text-white/60 font-mono border-l-2 border-neon-red/50 pl-3">
+              Real-Time Machine Learning Security
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col gap-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="glass-panel p-5 space-y-2 tech-border bg-black/40"
+            >
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-2">
+                <Network className="w-5 h-5 text-neon-red" />
+                <h3 className="text-lg font-bold">Unsupervised Learning</h3>
               </div>
-              <div className="h-px w-full bg-white/10" />
-              <div>
-                <div className="text-xs text-white/50 mb-1 font-mono uppercase">Active Nodes</div>
-                <div className="text-2xl font-bold">1,024</div>
+              <p className="text-white/70 leading-relaxed text-[13px]">
+                Rule-based firewalls fail against zero-day exploits. We implemented an <span className="text-neon-red font-bold">Unsupervised ML pipeline</span> utilizing PCA and K-Means clustering. The system autonomously learns the baseline geometry of "normal" traffic and dynamically isolates anomalous vector outliers.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="glass-panel p-5 space-y-2 tech-border bg-black/40"
+            >
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-2">
+                <Cpu className="w-5 h-5 text-orange-400" />
+                <h3 className="text-lg font-bold">Edge Processing</h3>
               </div>
-              <div className="h-px w-full bg-white/10" />
-              <div>
-                <div className="text-xs text-white/50 mb-1 font-mono uppercase">Threat Status</div>
-                <div className="text-xl font-bold text-neon-red flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-neon-red animate-ping" />
-                  Elevated
-                </div>
+              <p className="text-white/70 leading-relaxed text-[13px]">
+                To achieve the microsecond latency required for packet interception, the inference engine is compiled to C++ using ONNX Runtime. The models run directly on the edge routing hardware.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Tech Stack Breakdown */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="glass-panel p-5 tech-border bg-black/40"
+          >
+            <div className="grid grid-cols-3 gap-4 text-center divide-x divide-white/10">
+              <div className="space-y-1">
+                <div className="flex justify-center"><Server className="w-4 h-4 text-neon-red mb-1" /></div>
+                <div className="text-[9px] text-neon-red font-mono uppercase tracking-wider">Scikit-Learn</div>
+                <p className="text-[10px] text-white/50 leading-tight">Isolation Forest & K-Means</p>
+              </div>
+              
+              <div className="space-y-1 px-2">
+                <div className="flex justify-center"><Lock className="w-4 h-4 text-neon-red mb-1" /></div>
+                <div className="text-[9px] text-neon-red font-mono uppercase tracking-wider">Wireshark</div>
+                <p className="text-[10px] text-white/50 leading-tight">PCAP / DPI Extraction</p>
+              </div>
+
+              <div className="space-y-1 px-2">
+                <div className="flex justify-center"><ShieldCheck className="w-4 h-4 text-neon-red mb-1" /></div>
+                <div className="text-[9px] text-neon-red font-mono uppercase tracking-wider">ONNX</div>
+                <p className="text-[10px] text-white/50 leading-tight">Optimized Edge Target</p>
               </div>
             </div>
           </motion.div>
+        </div>
+
+        {/* Right Column: Terminal & Highly Technical PCA Plot */}
+        <motion.div style={{ y: y1 }} className="flex flex-col gap-6 w-full mt-8 lg:mt-0 max-w-lg mx-auto scale-[0.85] md:scale-100 origin-top md:origin-center">
+          
+          {/* Packet Stream / DPI Node */}
+          <div className="glass-panel p-3 bg-[#050508] tech-border relative">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-[10px] text-neon-red font-mono uppercase tracking-widest">DPI Packet Ingestion</span>
+              <span className="flex items-center gap-1 text-[9px] text-neon-red border border-neon-red/30 px-1 rounded bg-neon-red/10">
+                <span className="w-1.5 h-1.5 bg-neon-red rounded-full animate-pulse" /> Live Stream
+              </span>
+            </div>
+            <div className="font-mono text-[8px] text-white/40 bg-black/60 p-2 rounded border border-white/5 break-all">
+              <span className="text-white/60">0000</span>  45 00 00 3c 1c 46 40 00 40 06 b1 e6 c0 a8 01 2d  <span className="text-orange-300">E..&lt;.F@.@......-</span><br/>
+              <span className="text-white/60">0010</span>  0a 00 00 05 01 bb 00 50 00 00 00 00 00 00 00 00  <span className="text-orange-300">.......P........</span><br/>
+              <span className="text-white/60">0020</span>  50 02 20 00 <span className="text-neon-red font-bold animate-pulse">ff ff</span> 00 00 00 00 00 00 00 00 00 00  <span className="text-orange-300">P. .............</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center -my-4 relative z-10"><MoveDown className="w-4 h-4 text-white/30" /></div>
+
+          {/* Scatter Plot Diagram (Highly Technical) */}
+          <div className="glass-panel p-4 bg-[#050508] tech-border flex flex-col gap-2 relative h-64 overflow-hidden">
+            <div className="text-[10px] text-neon-red font-mono uppercase tracking-widest absolute top-3 left-4 z-20">PCA Cluster Projection</div>
+            
+            {/* Grid Lines & Radar Sweep */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:15px_15px] z-0" />
+            
+            {/* Radar scanner sweep effect */}
+            <motion.div 
+              className="absolute top-1/2 left-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 origin-center z-0 pointer-events-none rounded-full"
+              style={{ background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.3) 95%, rgba(16,185,129,0.8) 100%)' }}
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            />
+            
+            {/* Axes */}
+            <div className="absolute bottom-10 left-10 right-4 h-px bg-white/30 z-10" />
+            <div className="absolute top-8 bottom-10 left-10 w-px bg-white/30 z-10" />
+            
+            {/* Origin & Tick Marks */}
+            <div className="absolute bottom-[34px] left-[34px] text-[8px] text-white/30 font-mono z-10">0.0</div>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={`x-${i}`} className="absolute bottom-9 w-px h-2 bg-white/30 z-10" style={{ left: `${10 + i * 15}%` }} />
+            ))}
+            {[1, 2, 3, 4].map((i) => (
+              <div key={`y-${i}`} className="absolute left-9 h-px w-2 bg-white/30 z-10" style={{ bottom: `${10 + i * 20}%` }} />
+            ))}
+
+            {/* Normal Traffic Cluster (Green) */}
+            <motion.div 
+              className="absolute top-[45%] left-[35%] w-32 h-32 flex flex-wrap gap-[2px] p-2 justify-center items-center -translate-y-1/2 -translate-x-1/2 z-10"
+            >
+              <div className="absolute -top-5 left-0 text-[8px] text-emerald-400 font-mono whitespace-nowrap bg-black/50 px-1 border border-emerald-500/30 rounded">Baseline: K-Means (k=3)</div>
+              {/* Density Map background glow */}
+              <div className="absolute inset-0 bg-emerald-500/10 blur-xl rounded-full" />
+              {clusterPoints.map((pt, i) => (
+                <div key={i} className="absolute w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,1)] opacity-90" 
+                     style={{ transform: `translate(${pt.dx}px, ${pt.dy}px)` }} />
+              ))}
+            </motion.div>
+
+            {/* Anomalous Outlier (Red) */}
+            <motion.div 
+              className="absolute top-[20%] right-[15%] w-3 h-3 bg-neon-red rounded-full shadow-[0_0_20px_rgba(255,51,102,1)] flex items-center justify-center z-20"
+              animate={{ scale: [1, 1.8, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+            >
+              <Target className="absolute w-10 h-10 text-neon-red/60 animate-spin-slow" />
+              {/* Distance Vector Line */}
+              <svg className="absolute w-48 h-40 -left-44 -top-6 pointer-events-none" style={{ zIndex: -1 }}>
+                <line x1="168" y1="20" x2="10" y2="90" stroke="rgba(255,51,102,0.8)" strokeWidth="1.5" strokeDasharray="3 3" />
+                <text x="80" y="50" fill="rgba(255,51,102,0.9)" fontSize="9" fontFamily="monospace" transform="rotate(-20 80 50)" fontWeight="bold">Outlier Dist: 14.2σ</text>
+              </svg>
+              {/* Isolation ring */}
+              <motion.div 
+                className="absolute w-20 h-20 border-2 border-neon-red rounded-full"
+                animate={{ scale: [0.6, 1.8], opacity: [1, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              />
+            </motion.div>
+
+            {/* Legend / Info */}
+            <div className="absolute bottom-2 left-10 right-4 flex justify-between text-[9px] font-mono text-white/40 z-10">
+              <span>PC1 (Req/Sec)</span>
+              <span>PC2 (Byte Size)</span>
+            </div>
+            <div className="absolute bottom-12 right-4 text-[8px] font-mono text-white/30 z-10 border border-white/10 bg-black/50 p-1 rounded">
+              Var Explained: 98.4%
+            </div>
+          </div>
+
+          <div className="flex justify-center -my-4 relative z-10"><MoveDown className="w-4 h-4 text-white/30" /></div>
 
           {/* Terminal Window */}
           <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-2 glass-panel p-0 overflow-hidden flex flex-col"
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="glass-panel p-0 overflow-hidden flex flex-col tech-border h-[180px]"
           >
-            <div className="bg-white/5 px-4 py-2 border-b border-white/10 flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-white/40" />
-              <span className="text-xs text-white/40 font-mono">system_logs_tty1</span>
+            <div className="bg-[#050508] px-4 py-2 border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <TermIcon className="w-3 h-3 text-white/50" />
+                <span className="text-[10px] font-mono text-white/50">system_logs_tty1</span>
+              </div>
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-white/20" />
+                <div className="w-2 h-2 rounded-full bg-white/20" />
+                <div className="w-2 h-2 rounded-full bg-white/20" />
+              </div>
             </div>
-            <div className="p-6 font-mono text-sm h-64 flex flex-col justify-end">
-              {logs.map((log, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`py-1 ${
-                    log.includes("CRITICAL") || log.includes("WARNING") 
-                      ? "text-neon-red drop-shadow-[0_0_5px_rgba(255,42,42,0.8)] font-bold" 
-                      : log.includes("Neutralized")
-                      ? "text-neon-green"
-                      : "text-white/60"
-                  }`}
-                >
-                  <span className="text-white/30 mr-2">{'>'}</span> {log}
-                </motion.div>
-              ))}
-              <div className="py-1 text-neon-blue animate-pulse">
-                <span className="text-white/30 mr-2">{'>'}</span> _
+            <div className="bg-black flex-1 p-3 font-mono text-[10px] overflow-hidden flex flex-col justify-end">
+              <div className="space-y-1">
+                {logs.map((log, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className={`${
+                      log.includes('CRITICAL') || log.includes('BLOCK') || log.includes('ALERT')
+                        ? 'text-neon-red bg-neon-red/10 px-1 -mx-1' 
+                        : log.includes('WARN')
+                        ? 'text-orange-400'
+                        : 'text-emerald-400'
+                    }`}
+                  >
+                    <span className="text-white/30 mr-2">{new Date().toISOString().split('T')[1].slice(0,8)}</span>
+                    {log}
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
 
-        </div>
+        </motion.div>
 
       </div>
     </section>
