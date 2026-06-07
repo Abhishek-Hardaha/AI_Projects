@@ -141,13 +141,7 @@ export default function MarktView() {
           </motion.div>
 
           {/* Action Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="pt-2"
-          >
+          <div className="pt-4 md:pt-2">
             <a 
               href="https://marktview.onrender.com" 
               target="_blank" 
@@ -155,9 +149,9 @@ export default function MarktView() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-neon-green/10 border border-neon-green/50 text-neon-green font-mono text-sm hover:bg-neon-green/20 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all rounded-lg"
             >
               <ExternalLink className="w-4 h-4" />
-              MarktView.onrender.com
+              Launch MarktView.onrender.com
             </a>
-          </motion.div>
+          </div>
         </div>
 
         {/* Right Column: UI Mockup & RAG Interaction Flow */}

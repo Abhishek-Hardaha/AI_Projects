@@ -185,12 +185,14 @@ export default function NetworkThreat() {
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:15px_15px] z-0" />
             
             {/* Radar scanner sweep effect */}
-            <motion.div 
-              className="absolute top-1/2 left-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 origin-center z-0 pointer-events-none rounded-full"
-              style={{ background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.3) 95%, rgba(16,185,129,0.8) 100%)' }}
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            />
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" style={{ WebkitMaskImage: 'radial-gradient(circle, black 15%, transparent 45%)', maskImage: 'radial-gradient(circle, black 15%, transparent 45%)' }}>
+              <motion.div 
+                className="absolute inset-[-50%] origin-center rounded-full"
+                style={{ background: 'conic-gradient(from 0deg, transparent 75%, rgba(16,185,129,0.15) 93%, rgba(16,185,129,0.4) 100%)' }}
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
             
             {/* Axes */}
             <div className="absolute bottom-10 left-10 right-4 h-px bg-white/30 z-10" />
@@ -219,24 +221,16 @@ export default function NetworkThreat() {
             </motion.div>
 
             {/* Anomalous Outlier (Red) */}
-            <motion.div 
-              className="absolute top-[20%] right-[15%] w-3 h-3 bg-neon-red rounded-full shadow-[0_0_20px_rgba(255,51,102,1)] flex items-center justify-center z-20"
-              animate={{ scale: [1, 1.8, 1], opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 1.2, repeat: Infinity }}
+            <div 
+              className="absolute top-[20%] right-[15%] w-3 h-3 bg-neon-red rounded-full shadow-[0_0_15px_rgba(255,51,102,0.8)] flex items-center justify-center z-20"
             >
-              <Target className="absolute w-10 h-10 text-neon-red/60 animate-spin-slow" />
+              <Target className="absolute w-8 h-8 text-neon-red/40 animate-spin-slow" />
               {/* Distance Vector Line */}
               <svg className="absolute w-48 h-40 -left-44 -top-6 pointer-events-none" style={{ zIndex: -1 }}>
-                <line x1="168" y1="20" x2="10" y2="90" stroke="rgba(255,51,102,0.8)" strokeWidth="1.5" strokeDasharray="3 3" />
-                <text x="80" y="50" fill="rgba(255,51,102,0.9)" fontSize="9" fontFamily="monospace" transform="rotate(-20 80 50)" fontWeight="bold">Outlier Dist: 14.2σ</text>
+                <line x1="168" y1="20" x2="10" y2="90" stroke="rgba(255,51,102,0.6)" strokeWidth="1" strokeDasharray="3 3" />
+                <text x="80" y="50" fill="rgba(255,51,102,0.8)" fontSize="9" fontFamily="monospace" transform="rotate(-20 80 50)" fontWeight="bold">Outlier Dist: 14.2σ</text>
               </svg>
-              {/* Isolation ring */}
-              <motion.div 
-                className="absolute w-20 h-20 border-2 border-neon-red rounded-full"
-                animate={{ scale: [0.6, 1.8], opacity: [1, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
-            </motion.div>
+            </div>
 
             {/* Legend / Info */}
             <div className="absolute bottom-2 left-10 right-4 flex justify-between text-[9px] font-mono text-white/40 z-10">
