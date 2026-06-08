@@ -233,7 +233,7 @@ export default function NetworkThreat() {
             </div>
 
             {/* Legend / Info */}
-            <div className="absolute bottom-2 left-10 right-4 flex justify-between text-[9px] font-mono text-white/40 z-10">
+            <div className="absolute bottom-2 left-10 right-4 flex justify-between text-[10px] font-mono text-white/60 font-semibold z-10">
               <span>PC1 (Req/Sec)</span>
               <span>PC2 (Byte Size)</span>
             </div>
@@ -263,14 +263,14 @@ export default function NetworkThreat() {
                 <div className="w-2 h-2 rounded-full bg-white/20" />
               </div>
             </div>
-            <div className="bg-black flex-1 p-3 font-mono text-[10px] overflow-hidden flex flex-col justify-end">
+            <div className="bg-black flex-1 p-3 font-mono text-[10px] overflow-x-auto overflow-y-hidden flex flex-col justify-end hide-scrollbar">
               <div className="space-y-1">
                 {logs.map((log, i) => (
                   <motion.div 
                     key={i}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`${
+                    className={`whitespace-nowrap ${
                       log.includes('CRITICAL') || log.includes('BLOCK') || log.includes('ALERT')
                         ? 'text-neon-red bg-neon-red/10 px-1 -mx-1' 
                         : log.includes('WARN')

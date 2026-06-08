@@ -17,11 +17,11 @@ interface Props {
   mouseConnectionColor?: string;
 }
 
-export default function ParticleConstellation({ 
+export default function ParticleConstellation({
   className = "",
   particleColor = "rgba(168, 85, 247, 0.6)", // violet-500
   connectionColor = "rgba(168, 85, 247, 0.4)",
-  mouseConnectionColor = "rgba(59, 130, 246, 0.8)", // blue-500
+  mouseConnectionColor = "rgba(44, 206, 255, 0.8)", // blue-500
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -102,8 +102,8 @@ export default function ParticleConstellation({
             ctx.lineTo(p2.x, p2.y);
             const alpha = 1 - dist / maxDist;
             ctx.strokeStyle = p1.isMouse || p2.isMouse
-              ? mouseConnectionColor.replace(/[\d.]+\)$/, `${alpha * 0.8})`)
-              : connectionColor.replace(/[\d.]+\)$/, `${alpha * 0.4})`);
+              ? mouseConnectionColor.replace(/[\d.]+\)$/, `${alpha * 1})`)
+              : connectionColor.replace(/[\d.]+\)$/, `${alpha * 0.8})`);
             ctx.lineWidth = p1.isMouse || p2.isMouse ? 1.5 : 1;
             ctx.stroke();
           }
@@ -119,8 +119,8 @@ export default function ParticleConstellation({
   }, [dimensions, particleColor, connectionColor, mouseConnectionColor]);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className={`relative w-full h-full overflow-hidden ${className}`}
       onMouseMove={(e) => {
         const rect = containerRef.current!.getBoundingClientRect();

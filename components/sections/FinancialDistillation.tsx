@@ -87,19 +87,19 @@ export default function FinancialDistillation() {
               <div className="space-y-1">
                 <div className="flex justify-center"><Brain className="w-4 h-4 text-neon-violet mb-1" /></div>
                 <div className="text-[9px] text-neon-violet font-mono uppercase tracking-wider">Teacher</div>
-                <p className="text-[10px] text-white/50 leading-tight">Gemma 4 (26B)</p>
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Gemma 4 (26B)</p>
               </div>
               
               <div className="space-y-1 px-2">
                 <div className="flex justify-center"><Cpu className="w-4 h-4 text-neon-violet mb-1" /></div>
                 <div className="text-[9px] text-neon-violet font-mono uppercase tracking-wider">Student</div>
-                <p className="text-[10px] text-white/50 leading-tight">Gemma 3 (1.2B)</p>
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Gemma 3 (1.2B)</p>
               </div>
 
               <div className="space-y-1 px-2">
                 <div className="flex justify-center"><Download className="w-4 h-4 text-neon-violet mb-1" /></div>
                 <div className="text-[9px] text-neon-violet font-mono uppercase tracking-wider">Format</div>
-                <p className="text-[10px] text-white/50 leading-tight">GGUF (Edge)</p>
+                <p className="text-[10px] text-white/80 font-medium leading-tight">GGUF (Edge)</p>
               </div>
             </div>
           </motion.div>
@@ -129,7 +129,7 @@ export default function FinancialDistillation() {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white mb-0.5">1. Teacher Model</h4>
-                <p className="text-[10px] text-neon-violet font-mono">Gamma 4 26B it</p>
+                <p className="text-[10px] text-neon-violet font-mono">Gemma 4 26B it</p>
                 <p className="text-[9px] text-white/50 mt-0.5">Generates synthetic Chain-of-Thought</p>
               </div>
             </motion.div>
@@ -201,7 +201,7 @@ export default function FinancialDistillation() {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white mb-0.5">4. Edge Inference</h4>
-                <p className="text-[10px] text-blue-400 font-mono">Gamma 3 1B</p>
+                <p className="text-[10px] text-blue-400 font-mono">Gemma 3 1B</p>
                 <p className="text-[9px] text-white/50 mt-0.5">Local, low-latency execution</p>
               </div>
             </motion.div>

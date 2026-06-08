@@ -26,7 +26,7 @@ export default function MarktView() {
   const y1 = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen w-full flex py-16 px-6 md:py-12 md:px-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+    <section ref={containerRef} className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
       
       {/* Indian Stock Marquee Ticker */}
       <div className="absolute top-0 left-0 w-full h-10 border-b border-white/5 bg-black/40 backdrop-blur-xl flex items-center z-30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
@@ -54,7 +54,7 @@ export default function MarktView() {
       {/* Background glow */}
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-neon-green/10 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl w-full mx-auto my-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 lg:gap-12 items-center pt-10 md:pt-0">
+      <div className="relative z-10 max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 lg:gap-12 items-center">
         
         {/* Left Column: Meaningful Text Content */}
         <div className="flex flex-col gap-3 md:gap-4">
@@ -77,14 +77,14 @@ export default function MarktView() {
                 href="https://marktview.onrender.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-neon-green/10 hover:bg-neon-green/20 border border-neon-green/50 text-neon-green font-mono font-bold text-sm rounded-lg transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(57,255,20,0.1)] hover:shadow-[0_0_30px_rgba(57,255,20,0.3)]"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-neon-green/10 hover:bg-neon-green/20 border border-neon-green/50 text-neon-green font-mono font-bold text-sm rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(57,255,20,0.1)] hover:shadow-[0_0_30px_rgba(57,255,20,0.4)]"
               >
                 <ExternalLink className="w-4 h-4" />
                 Launch MarktView.onrender.com
               </a>
             </div>
             <p className="text-sm md:text-lg text-white/60 font-mono border-l-2 border-neon-green/50 pl-3">
-              Democratizing Complex Market Analysis
+              Autonomous Market Intelligence Pipeline
             </p>
           </motion.div>
 
@@ -268,8 +268,8 @@ export default function MarktView() {
                 Your portfolio grew <span className="text-emerald-400 font-bold bg-emerald-400/10 px-1 rounded">+2.5%</span> due to <span className="text-white font-bold">NVDA (+4.2%)</span>.
                 <br/>
                 <span className="text-[8px] text-white/40 uppercase tracking-widest block mt-1.5 mb-0.5 font-mono">Retrieved Sources:</span>
-                <span className="text-neon-green/70 block text-[9px]">• Reuters: Tech rallies on AI hardware demand.</span>
-                <span className="text-neon-green/70 block text-[9px]">• Bloomberg: MSFT announces new cloud pipeline.</span>
+                <span className="text-neon-green/70 block text-[10px] leading-relaxed tracking-wide mt-0.5">• Reuters: Tech rallies on AI hardware demand.</span>
+                <span className="text-neon-green/70 block text-[10px] leading-relaxed tracking-wide mt-0.5">• Bloomberg: MSFT announces new cloud pipeline.</span>
               </p>
             </motion.div>
 

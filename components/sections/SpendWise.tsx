@@ -186,7 +186,7 @@ export default function SpendWise() {
             </div>
 
             {/* Recent UPI Transactions */}
-            <div className="flex-1 bg-[#0a0a0c] rounded-t-3xl border-t border-white/5 px-5 pt-5 pb-6 overflow-y-auto hide-scrollbar">
+            <div className="flex-1 bg-[#0a0a0c] rounded-t-3xl border-t border-white/5 px-5 pt-5 pb-12 overflow-y-auto hide-scrollbar">
               <div className="flex justify-between items-end mb-4">
                 <h3 className="text-sm font-bold text-white">Recent Transactions</h3>
                 <span className="text-xs text-neon-blue font-medium cursor-pointer">View All</span>
@@ -224,7 +224,7 @@ export default function SpendWise() {
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-white">-₹4,250.00</div>
-                    <div className="text-[9px] text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded font-bold">Impulsive</div>
+                    <div className="text-[9px] text-rose-300 bg-rose-500/20 px-1.5 py-0.5 rounded font-bold shadow-[0_0_10px_rgba(244,63,94,0.2)]">Impulsive</div>
                   </div>
                 </div>
 
