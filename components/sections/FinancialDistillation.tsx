@@ -14,7 +14,7 @@ export default function FinancialDistillation() {
   const y1 = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen md:h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+    <section ref={containerRef} className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
       {/* Background glow */}
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-neon-violet/10 rounded-full blur-[150px] pointer-events-none" />
 

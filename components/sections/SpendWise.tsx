@@ -14,7 +14,7 @@ export default function SpendWise() {
   const y1 = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen md:h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+    <section ref={containerRef} className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
       {/* Interactive Liquid Background */}
       <div className="absolute inset-0 w-full h-full opacity-40 overflow-hidden">
         <LiquidEther 

@@ -14,7 +14,7 @@ export default function HeroSection() {
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen md:h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+    <section ref={containerRef} className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
       {/* Background data grid & glows */}
       <MagneticParticleField color="#00f0ff" />
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-neon-blue/10 rounded-full blur-[150px] pointer-events-none translate-x-1/3 -translate-y-1/3" />

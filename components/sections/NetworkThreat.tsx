@@ -63,7 +63,7 @@ export default function NetworkThreat() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen md:h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
+    <section ref={containerRef} className="relative min-h-screen w-full flex items-center justify-center py-20 px-6 md:p-12 overflow-hidden snap-start shrink-0 border-b border-white/5">
       {/* Interactive Tubes Background */}
       <div className="absolute inset-0 w-full h-full opacity-30 mix-blend-screen pointer-events-auto">
         <TubesBackground />
@@ -118,11 +118,11 @@ export default function NetworkThreat() {
               className="glass-panel p-5 space-y-2 tech-border bg-black/40"
             >
               <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-2">
-                <Cpu className="w-5 h-5 text-orange-400" />
-                <h3 className="text-lg font-bold">Edge Processing</h3>
+                <ShieldCheck className="w-5 h-5 text-orange-400" />
+                <h3 className="text-lg font-bold">Automated Threat Response</h3>
               </div>
               <p className="text-white/70 leading-relaxed text-[13px]">
-                To achieve the microsecond latency required for packet interception, the inference engine is compiled to C++ using ONNX Runtime. The models run directly on the edge routing hardware.
+                Upon anomaly detection, the system autonomously quarantines suspicious MAC addresses and triggers an <span className="text-neon-red font-bold">Isolation Forest-based classification pipeline</span> to distinguish false positives from genuine intrusions — reducing mean-time-to-respond (MTTR) to under 200ms.
               </p>
             </motion.div>
           </div>
